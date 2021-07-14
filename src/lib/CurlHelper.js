@@ -1,6 +1,7 @@
-export class CurlHelper {
-  constructor(config) {
+class CurlHelper {
+  constructor(config, path) {
     this.request = config;
+    this.path = path;
   }
 
   getHeaders() {
@@ -57,37 +58,13 @@ export class CurlHelper {
 
   getUrl() {
     if (this.request.baseURL) {
-      return this.request.baseURL + "/" + this.request.url;
+      return this.request.baseURL;
     }
     return this.request.url;
   }
 
-  getQueryString() {
-    let params = "",
-      i = 0;
-
-    for(let param in this.request.params) {
-      if({}.hasOwnProperty.call(this.request.params, param)) {
-        params +=
-        i !== 0
-          ? `&${param}=${this.request.params[param]}`
-          : `?${param}=${this.request.params[param]}`;
-        i++;
-      }
-    }
-
-    return params;
-  }
-
   getBuiltURL() {
-    let url = this.getUrl();
-
-    if (this.getQueryString() !== "") {
-      url = url.charAt(url.length - 1) === "/" ? url.substr(0, url.length - 1) : url;
-      url += this.getQueryString();
-    }
-
-    return url.trim();
+    return this.getUrl() + this.path;
   }
 
   generateCommand() {
@@ -96,3 +73,4 @@ export class CurlHelper {
       .replace(/\s{2,}/g, " ");
   }
 }
+module.exports = CurlHelper;
